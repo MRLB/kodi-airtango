@@ -6,7 +6,7 @@ import xbmcplugin
 import urllib
 import urlparse
 
-import json, urllib
+import json
 import datetime
 
 from bs4 import BeautifulSoup
@@ -19,6 +19,42 @@ xbmcplugin.setContent(addon_handle, 'movies')
 
 def build_url(query):
     return base_url + '?' + urllib.urlencode(query)
+
+def getfullteamname(abbreviation):
+    if abbreviation == "BAU":
+        return "Baunach Young Pikes"
+    elif abbreviation == "HH":
+        return "Hamburg Towers"
+    elif abbreviation == "HAN":
+        return "HEBEISEN WHITE WINGS Hanau"
+    elif abbreviation == "HD":
+        return "MLP Academics Heidelberg"
+    elif abbreviation == "CH":
+        return "NINERS Chemnitz"
+    elif abbreviation == "NÜR":
+        return "Nuernberg Falcons BC"
+    elif abbreviation == "HAG":
+        return "Phoenix Hagen"
+    elif abbreviation == "PSK":
+        return "PS Karlsruhe LIONS"
+    elif abbreviation == "TRI":
+        return "ROEMERSTROM Gladiators Trier"
+    elif abbreviation == "EHI":
+        return "TEAM EHINGEN URSPRING"
+    elif abbreviation == "PB":
+        return "Uni Baskets Paderborn"
+    elif abbreviation == "KIR":
+        return "VfL Kirchheim Knights"
+    elif abbreviation == "ART":
+        return "Artland Dragons"
+    elif abbreviation == "TUB":
+        return "Tigers Tuebingen"
+    elif abbreviation == "S04":
+        return "FC Schalke 04 Basketball"
+    elif abbreviation == "HRO":
+        return "ROSTOCK SEAWOLVES"
+    else:
+        return abbreviation
 
 mode = args.get('mode', None)
 
@@ -207,8 +243,9 @@ elif mode[0] == 'foldertoday':
             else:
                 j = 0
             i = i + 2
-            name = time+" Uhr: "+name+" - "+str(lines[i])[str(lines[i]).find('<b>')+3:str(lines[i]).find('</b>')]
+            name = time+" Uhr: "+getfullteamname(name)+" - "+getfullteamname(str(lines[i])[str(lines[i]).find('<b>')+3:str(lines[i]).find('</b>')])
             i = i + 2
+            #print("hierhierhier: " + str(j))
 
             base_url_0 = base_url_1 + str(j) + base_url_2
             response = urllib.urlopen(base_url_0).read()
@@ -223,6 +260,8 @@ elif mode[0] == 'foldertoday':
                     i2 = i3
                     i3 = len(jsonResult)
                 i3 = i3 + 1
+
+            #name = name+" ("+str(i2+1)+". Spieltag)"
 
             url = jsonResult[i2]['contentURL']
             image = jsonResult[i2]['teaser']['default']
