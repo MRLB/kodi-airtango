@@ -256,12 +256,15 @@ elif mode[0] == 'foldertoday':
             i2 = 0
             i3 = 0
             while i3 < len(jsonResult):
-                if str(jsonResult[i2]['subtitle'])[:10] == str(now)[8:10]+"."+str(now)[5:7]+"."+str(now)[0:4]:
+                if str(jsonResult[i3]['subtitle'])[:10] == str(now)[8:10]+"."+str(now)[5:7]+"."+str(now)[0:4]:
                     i2 = i3
                     i3 = len(jsonResult)
                 i3 = i3 + 1
+            #print name+" asdfasgasgasdg "+str(jsonResult[i2]['subtitle'])[:10]
+            #print(str(now)[8:10]+"."+str(now)[5:7]+"."+str(now)[0:4])
 
             #name = name+" ("+str(i2+1)+". Spieltag)"
+            #name = name+" "+str(i2)
 
             url = jsonResult[i2]['contentURL']
             image = jsonResult[i2]['teaser']['default']
