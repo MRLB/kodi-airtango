@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.airtango" name="airtango Basketball" version="0.0.5" provider-name="MRLB">
+<addon id="plugin.video.airtango" name="airtango" version="1.0.0" provider-name="MRLB">
 	<requires>
 		<import addon="xbmc.python" version="2.19.0" />
 		<import addon="script.module.beautifulsoup4" version="4.3.2"/>
@@ -11,13 +11,18 @@
 	<extension point="xbmc.addon.metadata">
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-		<summary lang="de">airtango Basketball</summary>
-		<description lang="de">airtango überträgt alle Spiele der zweiten deutschen Basketball-Bundesliga (Pro A) live</description>
+		<summary lang="de">airtango</summary>
+		<description lang="de">airtango überträgt alle Spiele der zweiten deutschen Basketball-Bundesliga (Pro A) sowie weiteren Sport live</description>
 		<assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
 	</assets>
 	<news>
+		v1.0.0 (2019-10-21):
+		- first release for new season 2019/2020
+		- renamed to airtango
+		- only live section
+		- to start a game please go to the context-menu and click on "play from here"
 		v0.0.5 (2018-10-14):
 		- fixed error at "today live" section
 		v0.0.4 (2018-09-30):
