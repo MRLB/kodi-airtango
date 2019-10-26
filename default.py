@@ -41,6 +41,7 @@ base_url_1 = "https://www.airtango.live/api/content-box/?baseconfig=40&module=25
 #base_url_main = "https://www.2basketballbundesliga.de"
 stream_url_1 = "https://www.airtango.live/api/v2/content/"
 stream_url_2 = "/access"
+useragent = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'}
 if mode is None:
     #foldername = "Heute live"
     #url = build_url({'mode': 'foldertoday', 'foldername': foldername})
@@ -66,7 +67,8 @@ if mode is None:
 elif mode[0] == 'playGame':
 #    xbmc.log("hiaerad: "+args['gameID'][0])
     stream_url_0 = stream_url_1 + args['gameID'][0]+stream_url_2
-    streamURL_response = requests.post(url=stream_url_0)
+    xbmc.log("URL: "+stream_url_0)
+    streamURL_response = requests.post(url=stream_url_0, headers = useragent)
     xbmc.log("hierasddd: "+streamURL_response.json()['status'])
     if streamURL_response.json()['status'] == "error":
         xbmcgui.Dialog().ok(_addon_name, "Spiel noch nicht verfügbar - ggf. noch nicht begonnen?")
