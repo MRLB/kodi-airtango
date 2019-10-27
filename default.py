@@ -11,7 +11,6 @@ import xbmcaddon
 import json
 import datetime
 
-from bs4 import BeautifulSoup
 import requests
 
 reload(sys)
@@ -32,34 +31,137 @@ _addon_path    = xbmc.translatePath(_addon.getAddonInfo("path") )
 def build_url(query):
     return base_url + '?' + urllib.urlencode(query)
 
+def createOrdner(mode, foldername, pressekonferenzID, reliveID, highlightsID):
+    url = build_url(
+        {'mode': mode, 'foldername': foldername, 'pressekonferenzID': pressekonferenzID,
+         'reliveID': reliveID, 'highlightsID': highlightsID})
+    li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+
 mode = args.get('mode', None)
 
 #Rohdaten
 now = datetime.datetime.now()
 base_url_1 = "https://www.airtango.live/api/content-box/?baseconfig=40&module=2551&live=true&exclude=76925"
-#base_url_2 = "/contents?needTotalCount=true"
+#Aufbaue Relive/Highlights/Pressekonferenz: base_url_2a + id + base_url_2b
+base_url_2a = "https://www.airtango.live/api/module/"
+base_url_2b = "/content"
 #base_url_main = "https://www.2basketballbundesliga.de"
 stream_url_1 = "https://www.airtango.live/api/v2/content/"
 stream_url_2 = "/access"
 useragent = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'}
 if mode is None:
-    #foldername = "Heute live"
-    #url = build_url({'mode': 'foldertoday', 'foldername': foldername})
-    #li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
-    #xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+    foldername = "Nächste Liveevents"
+    url = build_url({'mode': '2BasketballBundesligaAuswahlApi', 'foldername': foldername})
+    li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+
+    foldername = "2. Basketball Bundesliga Archiv"
+    url = build_url({'mode': '2BasketballBundesliga', 'foldername': foldername})
+    li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+
+    xbmcplugin.endOfDirectory(addon_handle)
+
+elif mode[0] == '2BasketballBundesliga':
+    #PS Karlsruhe LIONS
+    createOrdner('2BasketballBundesligaAuswahl', 'PS Karlsruhe LIONS', '4598', '4597', '4594')
+
+    #Artland Dragons
+    createOrdner('2BasketballBundesligaAuswahl', 'Artland Dragons', '4493', '4438', '4433')
+
+    #ROSTOCK SEAWOLVES
+    createOrdner('2BasketballBundesligaAuswahl', 'ROSTOCK SEAWOLVES', '4500', '4504', '4505')
+
+    #Bayer Giants Leverkusen
+    createOrdner('2BasketballBundesligaAuswahl', 'Bayer Giants Leverkusen', '4448', '4446', '4445')
+
+    #RÖMERTROM Gladiators Trier
+    createOrdner('2BasketballBundesligaAuswahl', 'RÖMERSTROM Gladiators Trier', '4515', '4513', '4510')
+
+    #Eisbären Bremerhaven
+    createOrdner('2BasketballBundesligaAuswahl', 'Eisbären Bremerhaven', '4463', '4461', '4459')
+
+    #Science City Jena
+    createOrdner('2BasketballBundesligaAuswahl', 'Science City Jena', '4522', '4519', '4518')
+
+    #FC Schalke 04 Basketball
+    createOrdner('2BasketballBundesligaAuswahl', 'FC Schalke 04 Basketball', '4475', '4473', '4472')
+
+    #TEAM EHINGEN URSPRING
+    createOrdner('2BasketballBundesligaAuswahl', 'TEAM EHINGEN URSPRING', '4530', '4528', '4525')
+
+    #MLP Academics Heidelberg
+    createOrdner('2BasketballBundesligaAuswahl', 'MLP Academics Heidelberg', '4483', '4481', '4478')
+
+    #Tigers Tübingen
+    createOrdner('2BasketballBundesligaAuswahl', 'Tigers Tübingen', '4539', '4537', '4534')
+
+    #Niners Chemnitz
+    createOrdner('2BasketballBundesligaAuswahl', 'Niners Chemnitz', '3661', '3659', '3658')
+
+    #Uni Baskets Paderborn
+    createOrdner('2BasketballBundesligaAuswahl', 'Uni Baskets Paderborn', '4548', '4546', '4543')
+
+    #Nürnberg Falcons BC
+    createOrdner('2BasketballBundesligaAuswahl', 'Nürnberg Falcons BC', '4492', '4491', '4489')
+
+    #VFL Kirchheim Knights
+    createOrdner('2BasketballBundesligaAuswahl', 'VFL Kirchheim Knights', '4556', '4555', '4553')
+
+    #Phoenix Hagen
+    createOrdner('2BasketballBundesligaAuswahl', 'Phoenix Hagen', '4500', '4499', '4496')
+
+    #wiha Panthers Schwennigen
+    createOrdner('2BasketballBundesligaAuswahl', 'wiha Panthers Schwennigen', '4565', '4562', '4559')
+
+    xbmcplugin.endOfDirectory(addon_handle)
+
+elif mode[0] == '2BasketballBundesligaAuswahl':
+    foldername = args['foldername'][0]+"-Archiv:"
+    li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url='', listitem=li)
+
+    foldername = "Relive"
+    url = build_url({'mode': '2BasketballBundesligaAuswahlApi', 'foldername': foldername, 'apiID':args['reliveID'][0] })
+    li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+
+    foldername = "Highlights"
+    url = build_url({'mode': '2BasketballBundesligaAuswahlApi', 'foldername': foldername, 'apiID':args['highlightsID'][0] })
+    li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+
+    foldername = "Pressekonferenz"
+    url = build_url({'mode': '2BasketballBundesligaAuswahlApi', 'foldername': foldername, 'apiID':args['pressekonferenzID'][0] })
+    li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+
+    xbmcplugin.endOfDirectory(addon_handle)
+
+elif mode[0] == '2BasketballBundesligaAuswahlApi':
     j = 0
-    #base_url_0 = base_url_1
-    response = urllib.urlopen(base_url_1).read()
+    # Aufbaue Relive/Highlights/Pressekonferenz: base_url_2a + id + base_url_2b
+    if args['foldername'][0] == 'Nächste Liveevents':
+        response = urllib.urlopen(base_url_1).read()
+    else:
+        base_url_2a = "https://www.airtango.live/api/module/"
+        base_url_2b = "/content"
+        base_url_2komplett = base_url_2a+args['apiID'][0]+base_url_2b
+        response = urllib.urlopen(base_url_2komplett).read()
+
     jsonResult = json.loads(response)
 
     while j < len(jsonResult['data']):
         gameID = jsonResult['data'][j]['id']
         startzeit = jsonResult['data'][j]['start_datetime']['date']
-        #xbmc.log(startzeit[:16])
-        foldername = startzeit[:16]+": "+jsonResult['data'][j]['fields']['Title'][0]['title']
+        description = jsonResult['data'][j]['fields']['Title'][0]['description']
+        # xbmc.log(startzeit[:16])
+        foldername = startzeit[:16] + ": " + jsonResult['data'][j]['fields']['Title'][0]['title']
         url = build_url({'mode': 'playGame', 'foldername': foldername, 'gameID': gameID})
         li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
-        #, isFolder=True
+        li.setProperty('IsPlayable', 'true')
+        li.setInfo('video', {'plot': description})
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
         j = j + 1
     xbmcplugin.endOfDirectory(addon_handle)
@@ -82,117 +184,3 @@ elif mode[0] == 'playGame':
         listitem.setInfo('video', '')
         listitem.setProperty('IsPlayable', 'true')
         xbmcplugin.setResolvedUrl(_addon_handler, True, listitem)
-
-#elif mode[0] == 'folder1':
-#    j2 = args['gameID'][0]
-#    print("hierhierhier: "+j2)
-#    response = urllib.urlopen(base_url_1).read()
-#    jsonResult = json.loads(response)
-#    i = 0
-#    while i < len(jsonResult):
-#        #try:
-#            #if len(jsonResult[i]['expectedAt']) > 9:
-#            #if str(now)[:10] == jsonResult[i]['expectedAt'][:10]:
-#        name = jsonResult[i]['subtitle'] + ": " + jsonResult[i]['name']
-#        url = jsonResult[i]['contentURL']
-#        image = jsonResult[i]['teaser']['default']
-#        li = xbmcgui.ListItem(name, iconImage=image)
-#        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-#                listitem=li)
-        #except:
-        #    fehler = "fehler"
-#        i = i + 1
-#    xbmcplugin.endOfDirectory(addon_handle)
-
-#    #listitem = xbmcgui.ListItem(path=url)
-#    #listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
-#    #listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-#    #xbmcplugin.setResolvedUrl(_addon_handler, True, listitem)
-
-#elif mode[0] == 'foldertoday':
-#    page = requests.get(base_url_main)
-#    soup = BeautifulSoup(page.content, 'html.parser')
-#    result_0 = soup.findAll("div", {"class": "dc-table"})
-#    lines = []
-#    counter = 0
-#    for ul in result_0:
-#        lines.extend(ul.findAll("div", {"class": "dc-cell"}))
-#        #print("asdfasgasdg")
-#        counter = counter + 1
-#    i = 0
-#    #print("hierasdf"+lines[0])
-#    while i < len(lines):
-#        if (str(lines[i])[str(lines[i]).find('>')+1:str(lines[i]).find('</')]) == "Heute":
-#            i = i + 1
-#            #Zeit
-#            time = str(lines[i])[str(lines[i]).find('>')+1:str(lines[i]).find('</')]
-#            i = i + 1
-#            j = 0
-#            name = str(lines[i])[str(lines[i]).find('<b>')+3:str(lines[i]).find('</b>')]
-#            if name == "BAU":
-#                j = 3
-#            elif name == "HH":
-#                j = 8
-#            elif name == "HAN":
-#                j = 10
-#            elif name == "HD":
-#                j = 12
-#            elif name == "CH":
-#                j = 14
-#            elif name == "NÜR":
-#                j == 16
-#            elif name == "HAG":
-#                j = 20
-#            elif name == "PSK":
-#                j = 22
-#            elif name == "TRI":
-#                j = 28
-#            elif name == "EHI":
-#                j = 30
-#            elif name == "PB":#
-#                j = 34
-#            elif name == "KIR":
-#                j = 36
-#            elif name == "ART":
-#                j = 86
-#            elif name == "TUB":
-#                j = 101
-#            elif name == "S04":
-#                j = 114
-#            elif name == "HRO":
-#                j = 138
-#            else:
-#                j = 0
-#            i = i + 2
-#            name = time+" Uhr: "+getfullteamname(name)+" - "+getfullteamname(str(lines[i])[str(lines[i]).find('<b>')+3:str(lines[i]).find('</b>')])
-#            i = i + 2
-#            #print("hierhierhier: " + str(j))
-
-#            base_url_0 = base_url_1 + str(j) + base_url_2
-#            response = urllib.urlopen(base_url_0).read()
-#            jsonResult = json.loads(response)
-#            #i2 = Spieltag
-
-#            #print("hierhierhier "+str(now)[8:10]+"."+str(now)[5:7]+"."+str(now)[0:4])
-#            i2 = 0
-#            i3 = 0
-#            while i3 < len(jsonResult):
-#                if str(jsonResult[i3]['subtitle'])[:10] == str(now)[8:10]+"."+str(now)[5:7]+"."+str(now)[0:4]:
-#                    i2 = i3
-#                    i3 = len(jsonResult)
-#                i3 = i3 + 1
-#            #print name+" asdfasgasgasdg "+str(jsonResult[i2]['subtitle'])[:10]
-#            #print(str(now)[8:10]+"."+str(now)[5:7]+"."+str(now)[0:4])
-
- #           #name = name+" ("+str(i2+1)+". Spieltag)"
- #           #name = name+" "+str(i2)
-
-#            url = jsonResult[i2]['contentURL']
-#            image = jsonResult[i2]['teaser']['default']
-#            li = xbmcgui.ListItem(name, iconImage=image)
-#            xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-#                    listitem=li)
-
-#        else:
-#            i = i + 6
-#    xbmcplugin.endOfDirectory(addon_handle)
