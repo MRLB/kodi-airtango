@@ -46,12 +46,19 @@ base_url_1 = "https://www.airtango.live/api/content-box/?baseconfig=40&module=25
 #Aufbaue Relive/Highlights/Pressekonferenz: base_url_2a + id + base_url_2b
 base_url_2a = "https://www.airtango.live/api/module/"
 base_url_2b = "/content"
+base_url_3 = "https://www.airtango.live/api/content-box/?baseconfig=40&module=3561&live=true"
+base_url_4 = "https://www.airtango.live/api/content-box/?baseconfig=40&module=3561&live=false"
 #base_url_main = "https://www.2basketballbundesliga.de"
 stream_url_1 = "https://www.airtango.live/api/v2/content/"
 stream_url_2 = "/access"
 useragent = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'}
 if mode is None:
-    foldername = "Nächste Liveevents"
+    foldername = "Nächste Liveevents (alle)"
+    url = build_url({'mode': '2BasketballBundesligaAuswahlApi', 'foldername': foldername})
+    li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+
+    foldername = "Nächste Liveevents (nur 2. Basketball Bundesliga)"
     url = build_url({'mode': '2BasketballBundesligaAuswahlApi', 'foldername': foldername})
     li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
@@ -64,6 +71,11 @@ if mode is None:
     xbmcplugin.endOfDirectory(addon_handle)
 
 elif mode[0] == '2BasketballBundesliga':
+    foldername = "Neueste Uploads"
+    url = build_url({'mode': '2BasketballBundesligaAuswahlApi', 'foldername': foldername, 'apiID': '3561'})
+    li = xbmcgui.ListItem(foldername, iconImage='DefaultFolder.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+
     #PS Karlsruhe LIONS
     createOrdner('2BasketballBundesligaAuswahl', 'PS Karlsruhe LIONS', '4598', '4597', '4594')
 
@@ -142,8 +154,12 @@ elif mode[0] == '2BasketballBundesligaAuswahl':
 elif mode[0] == '2BasketballBundesligaAuswahlApi':
     j = 0
     # Aufbaue Relive/Highlights/Pressekonferenz: base_url_2a + id + base_url_2b
-    if args['foldername'][0] == 'Nächste Liveevents':
+    if args['foldername'][0] == 'Nächste Liveevents (alle)':
         response = urllib.urlopen(base_url_1).read()
+    elif args['foldername'][0] == 'Nächste Liveevents (nur 2. Basketball Bundesliga)':
+        response = urllib.urlopen(base_url_3).read()
+    elif args['foldername'][0] == 'Neueste Uploads':
+        response = urllib.urlopen(base_url_4).read()
     else:
         base_url_2a = "https://www.airtango.live/api/module/"
         base_url_2b = "/content"
