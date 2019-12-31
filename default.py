@@ -19,7 +19,7 @@ sys.setdefaultencoding('utf8')
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
-xbmcplugin.setContent(addon_handle, 'movies')
+#xbmcplugin.setContent(addon_handle, 'movies')
 
 _addon_id      = 'plugin.video.airtango'
 _addon         = xbmcaddon.Addon(id=_addon_id)
